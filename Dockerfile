@@ -3,7 +3,6 @@ MAINTAINER dlallemand@cityway.fr
 
 ENV CHOUETTE_IEV_VERSION 3.2.1
 ENV CHOUETTE_WEB_VERSION 3_2
-ENV MAVEN_REPO maven
 
 RUN sed -i "s/\[base\]/\[base\]\nexclude=postgresql*/g" /etc/yum.repos.d/CentOS-Base.repo && \
     sed -i "s/\[updates\]/\[updates\]\nexclude=postgresql*/g" /etc/yum.repos.d/CentOS-Base.repo
@@ -56,13 +55,7 @@ RUN wget -q http://www.hibernatespatial.org/repository/org/hibernate/hibernate-s
     chown -R wildfly: /opt/wildfly
 
 #-- Install Chouette_IEV
-RUN wget http://${MAVEN_REPO}.chouette.mobi/mobi/chouette/chouette_iev/${CHOUETTE_IEV_VERSION}/maven-metadata.xml && \
-    CHOUETTE_EAR_VERSION=`sed -n 's:.*<version>\(.*\)</version>.*:\1:p' maven-metadata.xml` && \
-    CHOUETTE_EAR_VERSION=${CHOUETTE_EAR_VERSION%SNAPSHOT} && \
-    CHOUETTE_EAR_VERSION+=`sed -n 's:.*<timestamp>\(.*\)</timestamp>.*:\1:p' maven-metadata.xml` && \
-    CHOUETTE_EAR_VERSION+='-' && \
-    CHOUETTE_EAR_VERSION+=`sed -n 's:.*<buildNumber>\(.*\)</buildNumber>.*:\1:p' maven-metadata.xml` && \
-    wget -q http://${MAVEN_REPO}.chouette.mobi/mobi/chouette/chouette_iev/${CHOUETTE_IEV_VERSION}/chouette_iev-${CHOUETTE_EAR_VERSION}.ear && \
+RUN wget -q http://maven.chouette.mobi/mobi/chouette/chouette_iev/${CHOUETTE_IEV_VERSION}/chouette_iev-${CHOUETTE_IEV_VERSION}.ear && \
     cp chouette_iev-*.ear /opt/wildfly/standalone/deployments/chouette.ear
 
 #-- Copy confirm registration script
@@ -76,7 +69,6 @@ RUN mkdir /home/chouette/bin
 COPY config/chouette-init.sh /etc/init.d/chouette
 COPY config/chouette.sh /home/chouette/bin
 COPY config/chouette.conf /home/chouette/bin
-COPY config/application.yml /home/chouette/chouette-gui/config/
 COPY config/smtp_settings.rb /home/chouette/chouette-gui/config/initializers/
 
 RUN chown -R chouette: /home/chouette/
