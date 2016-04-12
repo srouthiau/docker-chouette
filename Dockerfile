@@ -1,9 +1,9 @@
 FROM centos:6.6
 MAINTAINER dlallemand@cityway.fr
 
-ENV CHOUETTE_IEV_VERSION 3.3.1-SNAPSHOT
-ENV CHOUETTE_WEB_VERSION develop
-ENV MAVEN_REPO maven-snapshot
+ENV CHOUETTE_IEV_VERSION 3.2.1
+ENV CHOUETTE_WEB_VERSION 3_2
+ENV MAVEN_REPO maven
 
 RUN sed -i "s/\[base\]/\[base\]\nexclude=postgresql*/g" /etc/yum.repos.d/CentOS-Base.repo && \
     sed -i "s/\[updates\]/\[updates\]\nexclude=postgresql*/g" /etc/yum.repos.d/CentOS-Base.repo
